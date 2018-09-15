@@ -1,62 +1,68 @@
+/*
+ * uart.c
+ *
+ *  Created on: Jun 7, 2015
+ *      Author: gijs
+ */
 
-#include <stdio.h>
-#include <string.h>
-#include <math.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <termios.h>
-#include <stdint.h>
-#include <iostream>
 #include "uart.h"
 
-uint8_t u8_bufWrite[50];
-int mainfd = -1;
-struct termios options;
 
+int uart_open(uart_properties *uart) {
+	FILE *slots;
+	char buf[30] = "/dev/ttyO";
+	char port_nr[2];
+	sprintf(port_nr, "%d", uart->uart_id);
+	strcat(buf,port_nr);
+	struct termios uart_port;
 
-int open_port(const char* port)
-{
-    int fd;
+	slots = fopen(SLOTS, "w");
+	if(slots == NULL) printf("slots didn't open\n");
+	fseek(slots,0,SEEK_SET);
 
-    fd = open(port, O_RDWR | O_NOCTTY | O_NDELAY);
+	fprintf(slots, "BB-UART%i", uart->uart_id+1);
+	fflush(slots);
+	fclose(slots);
 
-    if (fd == -1)
-    {
-        return -1;
-    }
+	uart->fd = open(buf, O_RDWR | O_NOCTTY);
+	if(uart->fd < 0) printf("port failed to open\n");
 
-    cout << "!!! Begin !!!" << endl;
-    return (fd);
+	bzero(&uart_port,sizeof(uart_port));
+
+	uart_port.c_cflag = uart->baudrate | CS8 | CLOCAL | CREAD;
+	uart_port.c_iflag = IGNPAR | ICRNL;
+	uart_port.c_oflag = 0;
+	uart_port.c_lflag = 0;
+
+	uart_port.c_cc[VTIME] = 0;
+	uart_port.c_cc[VMIN]  = 1;
+
+	//clean the line and set the attributes
+	tcflush(uart->fd,TCIFLUSH);
+	tcsetattr(uart->fd,TCSANOW,&uart_port);
+	return 0;
 }
 
-int InitUART0(void)
-{
-	mainfd = open_port("/dev/tty4");
+int uart_send(uart_properties *uart, char *tx, int length) {
+	if (write(uart->fd, tx, length) == -1) {
+		syslog(LOG_ERR, "Could not write %s to uart %i", tx, uart->uart_id);
+		return -1;
+	}
+	syslog(LOG_INFO, "Wrote %s to uart %i", tx, uart->uart_id);
+	return 0;
+}
 
-	    if(mainfd == -1)
-	    {
-	        return -1;
-	    }
+int uart_read(uart_properties *uart,unsigned char *rx, int length) {
+	int count;
+	if( (count = read(uart->fd,(void*)rx,length)) > 0) {
+		syslog(LOG_ERR, "Could not read from uart %i", uart->uart_id);
+		return count;
+	}
+	syslog(LOG_INFO,"Read %s from uart %i", rx, uart->uart_id);
+	return 0;
+}
 
-	    fcntl(mainfd, F_SETFL, FNDELAY);
-
-	    tcgetattr(mainfd, &options);
-	    cfsetispeed(&options, B115200);
-	    cfsetospeed(&options, B115200);
-
-
-	    options.c_cflag |= (CLOCAL | CREAD);
-	    options.c_cflag &= ~PARENB;
-	    options.c_cflag &= ~CSTOPB;
-	    options.c_cflag &= ~CSIZE;
-	    options.c_cflag |=  CS8;
-	    options.c_cflag &= ~CRTSCTS;               /* Disable hardware flow control */
-
-
-	    options.c_lflag &= ~(ICANON | ECHO | ISIG);
-
-
-	    tcsetattr(mainfd, TCSANOW, &options);
-
- }
+int uart_close(uart_properties *uart) {
+	close(uart->fd);
+	return 0;
+}
