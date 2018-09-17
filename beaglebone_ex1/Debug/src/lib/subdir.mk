@@ -4,22 +4,22 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
-../src/lib/EasyDriver.cpp \
 ../src/lib/SimpleGPIO.cpp \
+../src/lib/adc.cpp \
 ../src/lib/core.cpp \
 ../src/lib/pwm.cpp \
 ../src/lib/uart.cpp 
 
 OBJS += \
-./src/lib/EasyDriver.o \
 ./src/lib/SimpleGPIO.o \
+./src/lib/adc.o \
 ./src/lib/core.o \
 ./src/lib/pwm.o \
 ./src/lib/uart.o 
 
 CPP_DEPS += \
-./src/lib/EasyDriver.d \
 ./src/lib/SimpleGPIO.d \
+./src/lib/adc.d \
 ./src/lib/core.d \
 ./src/lib/pwm.d \
 ./src/lib/uart.d 

@@ -12,6 +12,10 @@
 #include "lib/SimpleGPIO.h"
 #include "lib/uart.h"
 
+/**
+ * @brief Define LED pin
+ * 
+ */
 #define LED0 67		// P8.8
 #define LED1 68		// P8.10
 #define LED2 44		// P8.12
@@ -19,27 +23,37 @@
 
 using namespace std;
 
+/**
+ * @brief Init variable
+ * 
+ */
 char rc_buf;
 char buf[50];
-int n,i,k,len;
+int n,i,k;
 int8_t flag_rc = 0;
 int8_t idx_rc = 0;
 char* cToken;
-int num_a, num_b;
-bool led_binary[4];
+int num_a, num_b;		// number a and b get form UART
+bool led_binary[4];		// binary form for displaying LED
 
 int main() {
 	cout << "Start exercise 1" << endl;
-	cout << "!!! Make sure you have enabled UART4 (/dev/ttyO4) see the README.md how to do this. !!!\n" << endl;
 
+	/**
+	 * @brief Init UART
+	 * 
+	 */
 	uart_properties *uart = (uart_properties *) malloc(sizeof(uart_properties));
-		uart->uart_id = uart4;
-		uart->baudrate = B9600;
+	uart->uart_id = uart4;
+	uart->baudrate = B9600;
 	cout << "UART_init" << endl;
-
 	uint8_t isOpen = uart_open(uart);
-
 	cout << "UART_open_done" << endl;
+
+	/**
+	 * @brief Getting number a and b form UART with format [<number_A>,<number_B>,]
+	 * 
+	 */
 	cout << "Enter number A and number B: "<< endl;
 	if (isOpen == 0) {
 		while(1)
@@ -77,19 +91,39 @@ int main() {
 	}
 	uart_close(uart);
 
+	/**
+	 * @brief Init LED pins
+	 * 
+	 */
 	gpio_export(LED0);	// P8.8
 	gpio_export(LED1);	// P8.10
 	gpio_export(LED2);	// P8.12
 	gpio_export(LED3);	// P8.14
 
+	/**
+	 * @brief Set output for LED pins
+	 * 
+	 */
 	gpio_set_dir(LED0,OUTPUT_PIN);
 	gpio_set_dir(LED1,OUTPUT_PIN);
 	gpio_set_dir(LED2,OUTPUT_PIN);
 	gpio_set_dir(LED3,OUTPUT_PIN);
 
+	/**
+	 * @brief Display number form numner A to number B by binary form
+	 * 
+	 */
 	for(i = num_a; i<= num_b; i++)
 	{
+		/**
+		 * @brief Convert to little endian binary form
+		 * 
+		 */
 		itob(i,led_binary);
+		/**
+		 * @brief Display LED and switch to big endian form
+		 * 
+		 */
 		if(led_binary[0])
 			gpio_set_value(LED3,HIGH);
 		else gpio_set_value(LED3,LOW);

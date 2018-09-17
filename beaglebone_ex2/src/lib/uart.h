@@ -1,3 +1,13 @@
+/**
+ * @brief 	- Tree overlay must be installed first by add BB-ADC-00A0.dtbo to /boot/uEvn.txt
+ * 			- Using uart_open() function to init UART4
+ * 			- Read or write data by using the two functions uart_sed() and uart_read(),
+ * 			- Access UART4 by this address /dev/ttyO4
+ * 
+ * @file uart.h
+ * @author NKNguyen
+ * @date 2018-09-17
+ */
 #ifndef UART_H_
 #define UART_H_
 

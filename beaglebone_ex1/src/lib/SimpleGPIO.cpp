@@ -43,9 +43,12 @@
 #include <fcntl.h>
 #include <poll.h>
 
-/****************************************************************
- * gpio_export
- ****************************************************************/
+/**
+ * @brief Export GPIO look at pin map for configuration
+ * 
+ * @param gpio 
+ * @return int 
+ */
 int gpio_export(unsigned int gpio)
 {
 	int fd, len;
@@ -64,9 +67,12 @@ int gpio_export(unsigned int gpio)
 	return 0;
 }
 
-/****************************************************************
- * gpio_unexport
- ****************************************************************/
+/**
+ * @brief Unexport GPIO
+ * 
+ * @param gpio 
+ * @return int 
+ */
 int gpio_unexport(unsigned int gpio)
 {
 	int fd, len;
@@ -84,9 +90,13 @@ int gpio_unexport(unsigned int gpio)
 	return 0;
 }
 
-/****************************************************************
- * gpio_set_dir
- ****************************************************************/
+/**
+ * @brief Set input or output mode
+ * 
+ * @param gpio 
+ * @param out_flag 
+ * @return int 
+ */
 int gpio_set_dir(unsigned int gpio, PIN_DIRECTION out_flag)
 {
 	int fd;
@@ -109,9 +119,13 @@ int gpio_set_dir(unsigned int gpio, PIN_DIRECTION out_flag)
 	return 0;
 }
 
-/****************************************************************
- * gpio_set_value
- ****************************************************************/
+/**
+ * @brief Set vaule
+ * 
+ * @param gpio 
+ * @param value 
+ * @return int 
+ */
 int gpio_set_value(unsigned int gpio, PIN_VALUE value)
 {
 	int fd;
@@ -134,9 +148,13 @@ int gpio_set_value(unsigned int gpio, PIN_VALUE value)
 	return 0;
 }
 
-/****************************************************************
- * gpio_get_value
- ****************************************************************/
+/**
+ * @brief Get value
+ * 
+ * @param gpio 
+ * @param value 
+ * @return int 
+ */
 int gpio_get_value(unsigned int gpio, unsigned int *value)
 {
 	int fd;
@@ -164,9 +182,13 @@ int gpio_get_value(unsigned int gpio, unsigned int *value)
 }
 
 
-/****************************************************************
- * gpio_set_edge
- ****************************************************************/
+/**
+ * @brief Set rising or falling edge
+ * 
+ * @param gpio 
+ * @param edge 
+ * @return int 
+ */
 
 int gpio_set_edge(unsigned int gpio, char *edge)
 {
@@ -186,10 +208,13 @@ int gpio_set_edge(unsigned int gpio, char *edge)
 	return 0;
 }
 
-/****************************************************************
- * gpio_fd_open
- ****************************************************************/
 
+/**
+ * @brief Open GPIO fd
+ * 
+ * @param gpio 
+ * @return int 
+ */
 int gpio_fd_open(unsigned int gpio)
 {
 	int fd;
@@ -204,19 +229,26 @@ int gpio_fd_open(unsigned int gpio)
 	return fd;
 }
 
-/****************************************************************
- * gpio_fd_close
- ****************************************************************/
 
+/**
+ * @brief Close GPIO fd
+ * 
+ * @param fd 
+ * @return int 
+ */
 int gpio_fd_close(int fd)
 {
 	return close(fd);
 }
 
 
-/****************************************************************
- * gpio_omap_mux_setup - Allow us to setup the omap mux mode for a pin
- ****************************************************************/
+/**
+ * @brief Allow us to setup the omap mux mode for a pin
+ * 
+ * @param omap_pin0_name 
+ * @param mode 
+ * @return int 
+ */
 int gpio_omap_mux_setup(const char *omap_pin0_name, const char *mode)
 {
 	int fd;
@@ -230,4 +262,32 @@ int gpio_omap_mux_setup(const char *omap_pin0_name, const char *mode)
 	write(fd, mode, strlen(mode) + 1);
 	close(fd);
 	return 0;
+}
+/**
+ * @brief Convert integer to binary
+ * 
+ * @param int_ 
+ * @param binary 
+ */
+void itob(int int_, bool* binary)
+{
+	int len,int__;
+	int b_idx = 0;
+	int__ = int_;
+	int_ /= 2;
+	int__ %= 2;
+	if(int__)
+		binary[b_idx] = 1;
+	else binary[b_idx] = 0;
+	b_idx++;
+	while(int_>0)
+	{
+		int__ = int_;
+		int_ /= 2;
+		int__ %= 2;
+		if(int__)
+			binary[b_idx] = 1;
+		else binary[b_idx] = 0;
+		b_idx++;
+	}
 }

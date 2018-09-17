@@ -1,6 +1,10 @@
-
-
-
+/**
+ * @brief 
+ * 
+ * @file pwm.cpp
+ * @author NKNguyen
+ * @date 2018-09-17
+ */
 
 
 #include "pwm.h"
@@ -12,10 +16,13 @@
 #include <fcntl.h>
 #include <poll.h>
 
-/****************************************************************
- * pwm funtions
- ****************************************************************/
 
+/**
+ * @brief Export pwm0 or pwm1
+ * 
+ * @param pwm 
+ * @return int 
+ */
 int pwm_export(unsigned int pwm)
 {
 	int fd, len;
@@ -33,7 +40,12 @@ int pwm_export(unsigned int pwm)
 
 	return 0;
 }
-
+/**
+ * @brief Unexport pwm0 or pwm1
+ * 
+ * @param pwm 
+ * @return int 
+ */
 int pwm_unexport(unsigned int pwm)
 {
 	int fd, len;
@@ -51,7 +63,13 @@ int pwm_unexport(unsigned int pwm)
 
 	return 0;
 }
-
+/**
+ * @brief Set duty cricle
+ * 
+ * @param duty 
+ * @param pwm_n 
+ * @return int 
+ */
 int pwm_duty_set(unsigned int duty,char* pwm_n)
 {
 	int fd, len;
@@ -63,14 +81,18 @@ int pwm_duty_set(unsigned int duty,char* pwm_n)
 		perror("pwm/duty");
 		return fd;
 	}
-
 	len = snprintf(buf, sizeof(buf), "%d", duty);
 	write(fd, buf, len);
 	close(fd);
-
 	return 0;
 }
-
+/**
+ * @brief Set period
+ * 
+ * @param period 
+ * @param pwm_n 
+ * @return int 
+ */
 int pwm_period_set(unsigned int period,char* pwm_n)
 {
 	int fd, len;
@@ -91,7 +113,13 @@ int pwm_period_set(unsigned int period,char* pwm_n)
 
 	return 0;
 }
-
+/**
+ * @brief Enable pwm0 or pwm1
+ * 
+ * @param enable 
+ * @param pwm_n 
+ * @return int 
+ */
 int pwm_enable(unsigned int enable,char* pwm_n)
 {
 	int fd, len;

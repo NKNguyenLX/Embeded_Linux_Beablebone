@@ -16,6 +16,10 @@
 
 using namespace std;
 
+/**
+ * @brief Init variable
+ * 
+ */
 char rc_buf;
 char buf[50];
 int n;
@@ -31,17 +35,23 @@ unsigned int led_2_duty;
 
 int main() {
 	cout << "Start exercise 1" << endl;
-	cout << "!!! Make sure you have enabled UART4 (/dev/ttyO4) see the README.md how to do this. !!!\n" << endl;
 
+	/**
+	 * @brief Init UART4
+	 * 
+	 */
 	uart_properties *uart = (uart_properties *) malloc(sizeof(uart_properties));
-		uart->uart_id = uart4;
-		uart->baudrate = B9600;
+	uart->uart_id = uart4;
+	uart->baudrate = B9600;
 	cout << "UART_init" << endl;
-
 	uint8_t isOpen = uart_open(uart);
-
 	cout << "UART_open_done" << endl;
 
+	/**
+	 * @brief Read period and duty cycle of LED1 and LED2 with the format:
+	 * 			[<led1_period>,<led1_duty>,<led2_period>,<led2_duty>,]
+	 * 
+	 */
 	if (isOpen == 0) {
 		while(1)
 		{
@@ -88,11 +98,19 @@ int main() {
 		}
 	uart_close(uart);
 
+	/**
+	 * @brief Dislay LED1 by using PWM0
+	 * 
+	 */
 	pwm_export(0);
 	pwm_period_set(led_1_period,(char*)PWM0);
 	pwm_duty_set(led_1_duty,(char*)PWM0);
 	pwm_enable(1,(char*)PWM0);
 
+	/**
+	 * @brief Display LED2 by using PWM1
+	 * 
+	 */
 	pwm_export(1);
 	pwm_period_set(led_2_period,(char*)PWM1);
 	pwm_duty_set(led_2_duty,(char*)PWM1);

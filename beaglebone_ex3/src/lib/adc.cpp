@@ -1,4 +1,10 @@
-
+/**
+ * @brief 
+ * 
+ * @file adc.cpp
+ * @author NKNguyen
+ * @date 2018-09-17
+ */
 #include "adc.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -8,9 +14,12 @@
 #include <fcntl.h>
 #include <poll.h>
 
-/****************************************************************
- * adc funtions
- ****************************************************************/
+/**
+ * @brief Read data form ADC pin number 0-9
+ * 
+ * @param adc_pin 
+ * @return int 
+ */
 int adc_pin_read(char adc_pin)
 {
 	int fd, len=5;
@@ -27,6 +36,12 @@ int adc_pin_read(char adc_pin)
 	return stod(buf);
 }
 
+/**
+ * @brief Convert string to integer
+ * 
+ * @param string 
+ * @return int 
+ */
 int stod(char* string)
 {
 	int i,sum,len;

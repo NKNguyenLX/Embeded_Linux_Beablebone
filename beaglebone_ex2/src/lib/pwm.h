@@ -1,3 +1,8 @@
+/**
+ * @brief   We set PWM by access to pwm0:x with address: /sys/class/pwm/pwmchip0 and init period, duty cycle
+ *          Before that tree overlay must be installed first by add BB-PWM1-00A0.dtbo to /boot/uEvn.txt
+ * 
+ */
 #ifndef PWM_H_
 #define PWM_H_
 
@@ -9,8 +14,8 @@
 #define SYSFS_PWM_PIN "/sys/class/pwm/pwmchip0/pwm-0:0"
 #define MAX_BUF 64
 
-#define PWM0 "pwm-0:0"	// P9.14
-#define PWM1 "pwm-0:1"	// P9.16
+#define PWM0 "pwm-0:0"
+#define PWM1 "pwm-0:1"
 /****************************************************************
  * pwm funtions
  ****************************************************************/

@@ -17,6 +17,10 @@
 
 using namespace std;
 
+/**
+ * @brief Init variable
+ * 
+ */
 char rc_buf;
 char buf[50];
 int n,adc_value;
@@ -26,11 +30,14 @@ char* cToken;
 
 int main() {
 	cout << "Start exercise 1" << endl;
-	cout << "Make sure you have enabled UART4 (/dev/ttyO4) see the README.md how to do this.\n" << endl;
 
+	/**
+	 * @brief Init UART4
+	 * 
+	 */
 	uart_properties *uart = (uart_properties *) malloc(sizeof(uart_properties));
-		uart->uart_id = uart4;
-		uart->baudrate = B9600;
+	uart->uart_id = uart4;
+	uart->baudrate = B9600;
 	cout << "UART_init" << endl;
 
 	uint8_t isOpen = uart_open(uart);
@@ -40,8 +47,16 @@ int main() {
 	if (isOpen == 0) {
 		while(1)
 		{
+			/**
+			 * @brief Choose ADC pin form keybroad
+			 * 
+			 */
 			cout << "Enter ADC port 0 - 9: " << endl;
 			n = read(uart->fd, &rc_buf, 1);
+			/**
+			 * @brief Read ADC pin
+			 * 
+			 */
 			adc_value = adc_pin_read(rc_buf);
 			cout << "ADC value of port " << rc_buf << " : " << adc_value << endl;
 			usleep(50000);

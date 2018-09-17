@@ -68,6 +68,6 @@ int gpio_set_edge(unsigned int gpio, char *edge);
 int gpio_fd_open(unsigned int gpio);
 int gpio_fd_close(int fd);
 int gpio_omap_mux_setup(const char *omap_pin0_name, const char *mode);
-void itob(int int_, bool* binary);	// little edian
+void itob(int int_, bool* binary);
 
 #endif /* SIMPLEGPIO_H_ */
