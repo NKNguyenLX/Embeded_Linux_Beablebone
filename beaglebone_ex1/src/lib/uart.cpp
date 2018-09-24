@@ -18,7 +18,7 @@ using namespace std;
  */
 int uart_open(uart_properties *uart) {
 	// Find the address
-	char buf[30] = "/dev/ttyO";
+	char buf[30] = UART_FILE_SYSFS;
 	char port_nr[2];
 	sprintf(port_nr, "%d", uart->uart_id);
 	strcat(buf,port_nr);

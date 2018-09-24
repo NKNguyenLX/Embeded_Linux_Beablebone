@@ -28,7 +28,7 @@ int pwm_export(unsigned int pwm)
 	int fd, len;
 	char buf[MAX_BUF];
 
-	fd = open("/sys/class/pwm/pwmchip0/export", O_WRONLY);
+	fd = open(SYSFS_PWM_EXPORT, O_WRONLY);
 	if (fd < 0) {
 		perror("pwm/export");
 		return fd;
@@ -51,7 +51,7 @@ int pwm_unexport(unsigned int pwm)
 	int fd, len;
 	char buf[MAX_BUF];
 
-	fd = open(SYSFS_PWM_DIR "/unexport", O_WRONLY);
+	fd = open(SYSFS_PWM_UNEXPORT, O_WRONLY);
 	if (fd < 0) {
 		perror("pwm/unexport");
 		return fd;
@@ -75,7 +75,8 @@ int pwm_duty_set(unsigned int duty,char* pwm_n)
 	int fd, len;
 	char buf[MAX_BUF];
 	char* addr;
-	sprintf(addr,"/sys/class/pwm/pwmchip0/%s/duty_cycle",pwm_n);
+
+	snprintf(addr, sizeof(addr), SYSFS_PWM_DIR  "/%s/duty_cycle", pwm_n);
 	fd = open(addr, O_WRONLY);
 	if (fd < 0) {
 		perror("pwm/duty");
@@ -100,7 +101,7 @@ int pwm_period_set(unsigned int period,char* pwm_n)
 
 	//fd = open("/sys/class/pwm/pwmchip0/pwm-0:0/period", O_WRONLY);
 	char* addr;
-	sprintf(addr,"/sys/class/pwm/pwmchip0/%s/period",pwm_n);
+	snprintf(addr, sizeof(addr), SYSFS_PWM_DIR  "/%s/period", pwm_n);
 	fd = open(addr, O_WRONLY);
 	if (fd < 0) {
 		perror("pwm/period");
@@ -127,7 +128,7 @@ int pwm_enable(unsigned int enable,char* pwm_n)
 
 	//fd = open("/sys/class/pwm/pwmchip0/pwm-0:0/enable", O_WRONLY);
 	char* addr;
-	sprintf(addr,"/sys/class/pwm/pwmchip0/%s/enable",pwm_n);
+	snprintf(addr, sizeof(addr), SYSFS_PWM_DIR  "/%s/enable", pwm_n);
 	fd = open(addr, O_WRONLY);
 	if (fd < 0) {
 		perror("pwm/enable");

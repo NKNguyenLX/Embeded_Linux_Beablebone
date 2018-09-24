@@ -10,7 +10,9 @@
  * Constants
  ****************************************************************/
 
-#define SYSFS_PWM_DIR "/sys/class/pwm/pwmchip3"
+#define SYSFS_PWM_DIR "/sys/class/pwm/pwmchip0"
+#define SYSFS_PWM_EXPORT "/sys/class/pwm/pwmchip0/export"
+#define SYSFS_PWM_UNEXPORT "/sys/class/pwm/pwmchip0/unexport"
 #define SYSFS_PWM_PIN "/sys/class/pwm/pwmchip0/pwm-0:0"
 #define MAX_BUF 64
 

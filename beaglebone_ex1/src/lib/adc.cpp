@@ -25,7 +25,8 @@ int adc_pin_read(char adc_pin)
 	int fd, len=5;
 	char* buf;
 	char* addr;
-	sprintf(addr,"/sys/bus/iio/devices/iio:device0/in_voltage%c_raw",adc_pin);
+	//sprintf(addr,"/sys/bus/iio/devices/iio:device0/in_voltage%c_raw",adc_pin);
+	snprintf(addr, sizeof(addr), SYSFS_ADC_DIR  "/in_voltage%c_raw", adc_pin);
 	fd = open(addr, O_RDONLY);
 	if (fd < 0) {
 		perror("adc_pin");
